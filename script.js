@@ -59,6 +59,12 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordInput.value = newPassword;
         // Trigger input event to update strength UI
         passwordInput.dispatchEvent(new Event('input'));
+        
+        // Add pulse animation
+        passwordInput.classList.remove('input-pulse');
+        // Trigger reflow to restart animation
+        void passwordInput.offsetWidth;
+        passwordInput.classList.add('input-pulse');
     });
 
     // Copy Password to Clipboard
