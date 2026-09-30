@@ -422,6 +422,47 @@ input::placeholder {
     transform: translateY(0);
 }
 
+/* History Chart */
+.history-container {
+    margin-bottom: 24px;
+    background: var(--input-bg);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--input-border);
+}
+
+.history-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.history-chart {
+    display: flex;
+    align-items: flex-end;
+    height: 40px;
+    gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.history-bar {
+    width: 20px;
+    border-radius: 4px;
+    background-color: var(--score-0);
+    transition: height 0.3s ease;
+    flex-shrink: 0;
+}
+
+.history-bar.score-0 { background-color: var(--score-0); }
+.history-bar.score-1 { background-color: var(--score-1); }
+.history-bar.score-2 { background-color: var(--score-2); }
+.history-bar.score-3 { background-color: var(--score-3); }
+.history-bar.score-4 { background-color: var(--score-4); }
+
 /* Toast Notification */
 .toast {
     position: fixed;

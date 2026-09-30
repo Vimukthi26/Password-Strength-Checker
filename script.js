@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pwnedStatus = document.getElementById('pwned-status');
     const pwnedCount = document.getElementById('pwned-count');
     const mascot = document.getElementById('mascot');
+    const historyChart = document.getElementById('history-chart');
     
     // Generator options
     const genLength = document.getElementById('gen-length');
@@ -155,6 +156,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // Trigger input event to update strength UI
         passwordInput.dispatchEvent(new Event('input'));
         
+        // Add to history directly since we know it's a discrete action
+        const currentScore = getPasswordScore(newPassword);
+        addHistoryBar(currentScore);
+        
         // Add pulse animation
         passwordInput.classList.remove('input-pulse');
         // Trigger reflow to restart animation
@@ -291,6 +296,45 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }, 500); // 500ms debounce
         }
+
+        // Debounce history addition
+        clearTimeout(window.historyTimeout);
+        if (password.length > 0) {
+            window.historyTimeout = setTimeout(() => {
+                addHistoryBar(score);
+            }, 1500); // 1.5 seconds after typing stops
+        }
+    }
+
+    function addHistoryBar(score) {
+        const bar = document.createElement('div');
+        bar.className = `history-bar score-${score}`;
+        const heights = ['20%', '40%', '60%', '80%', '100%'];
+        bar.style.height = heights[score] || '20%';
+        
+        historyChart.appendChild(bar);
+        
+        // Limit to 20 bars
+        while (historyChart.children.length > 20) {
+            historyChart.removeChild(historyChart.firstChild);
+        }
+        
+        // Scroll to right
+        historyChart.scrollLeft = historyChart.scrollWidth;
+    }
+
+    function getPasswordScore(password) {
+        let metRequirements = 0;
+        Object.keys(requirements).forEach(req => {
+            if (requirements[req].test(password)) metRequirements++;
+        });
+        let score = metRequirements;
+        if (password.length >= 12) score += 1;
+        if (/^[a-zA-Z]+$/.test(password) && password.length > 0) score -= 1;
+        if (/^[0-9]+$/.test(password) && password.length > 0) score -= 1;
+        score = Math.max(0, Math.min(5, score));
+        if (commonPasswords.includes(password.toLowerCase())) score = 0;
+        return score;
     }
 
     function updateStrengthUI(score, numericScore, entropy) {
