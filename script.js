@@ -29,6 +29,13 @@ document.addEventListener('DOMContentLoaded', () => {
         number: /[0-9]/,
         special: /[^A-Za-z0-9]/
     };
+    
+    // Top 10 most common passwords list
+    const commonPasswords = [
+        "password", "123456", "12345678", "123456789", "qwerty", 
+        "12345", "password123", "iloveyou", "admin", "admin123",
+        "welcome", "letmein", "111111"
+    ];
 
     // Toggle Password Visibility
     toggleVisibilityBtn.addEventListener('click', () => {
@@ -151,6 +158,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (/^[a-zA-Z]+$/.test(password) && password.length > 0) score -= 1;
         if (/^[0-9]+$/.test(password) && password.length > 0) score -= 1;
         score = Math.max(0, Math.min(5, score));
+        
+        // Detect common passwords
+        const isCommon = commonPasswords.includes(password.toLowerCase());
+        if (isCommon) {
+            numericScore = 0;
+            score = 0;
+            suggestions = ["⚠️ This is a very common password! Change it immediately."];
+        }
         
         if (password.length === 0) {
             score = 0;
