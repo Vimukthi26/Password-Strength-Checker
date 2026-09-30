@@ -19,7 +19,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateBtn = document.getElementById('generate-btn');
     const copyBtn = document.getElementById('copy-btn');
     const refreshBtn = document.getElementById('refresh-btn');
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
     const toast = document.getElementById('toast');
+
+    // Theme Toggle
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
+        if (document.body.classList.contains('light-mode')) {
+            themeIcon.textContent = '🌙';
+        } else {
+            themeIcon.textContent = '☀️';
+        }
+    });
 
     // Requirements regex mapping
     const requirements = {
