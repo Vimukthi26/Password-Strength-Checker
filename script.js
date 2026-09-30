@@ -13,6 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const pwnedStatus = document.getElementById('pwned-status');
     const pwnedCount = document.getElementById('pwned-count');
     
+    // Generator options
+    const genLength = document.getElementById('gen-length');
+    const genLengthVal = document.getElementById('gen-length-val');
+    
+    // Update slider value display
+    genLength.addEventListener('input', (e) => {
+        genLengthVal.textContent = e.target.value;
+    });
+    
     const requirementItems = document.querySelectorAll('#requirement-list li');
     
     const suggestionsContainer = document.getElementById('suggestions-container');
@@ -291,28 +300,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateStrongPassword() {
-        const length = 16; // Generate a robust 16 char password by default
-        const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        const lowercase = "abcdefghijklmnopqrstuvwxyz";
-        const numbers = "0123456789";
-        const special = "!@#$%^&*()_+~`|}{[]:;?><,./-=";
+        const length = parseInt(document.getElementById('gen-length').value, 10);
+        const useUpper = document.getElementById('gen-upper').checked;
+        const useLower = document.getElementById('gen-lower').checked;
+        const useNumbers = document.getElementById('gen-numbers').checked;
+        const useSymbols = document.getElementById('gen-symbols').checked;
         
-        const allChars = uppercase + lowercase + numbers + special;
-        let password = "";
+        let chars = '';
+        if (useUpper) chars += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        if (useLower) chars += 'abcdefghijklmnopqrstuvwxyz';
+        if (useNumbers) chars += '0123456789';
+        if (useSymbols) chars += '!@#$%^&*()_+~`|}{[]:;?><,./-=';
         
-        // Guarantee at least one of each requirement
-        password += uppercase[Math.floor(Math.random() * uppercase.length)];
-        password += lowercase[Math.floor(Math.random() * lowercase.length)];
-        password += numbers[Math.floor(Math.random() * numbers.length)];
-        password += special[Math.floor(Math.random() * special.length)];
-        
-        // Fill the rest randomly
-        for (let i = 4; i < length; i++) {
-            password += allChars[Math.floor(Math.random() * allChars.length)];
+        if (chars === '') {
+            showToast('Please select at least one character type!');
+            return passwordInput.value;
         }
-        
-        // Shuffle the password so the guaranteed chars aren't always at the beginning
-        return password.split('').sort(() => 0.5 - Math.random()).join('');
+
+        let password = '';
+        const array = new Uint32Array(length);
+        window.crypto.getRandomValues(array);
+        for (let i = 0; i < length; i++) {
+            password += chars[array[i] % chars.length];
+        }
+        return password;
     }
 
     function showToast(message) {
