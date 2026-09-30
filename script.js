@@ -109,30 +109,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPassword) {
             iconEye.classList.add('hidden');
             iconEyeOff.classList.remove('hidden');
-            mascot.textContent = '🐵';
         } else {
             iconEye.classList.remove('hidden');
             iconEyeOff.classList.add('hidden');
-            if (document.activeElement === passwordInput) {
-                mascot.textContent = '🙈';
-            } else {
-                mascot.textContent = '🐒';
-            }
-        }
-    });
-
-    // Mascot Focus/Blur interaction
-    passwordInput.addEventListener('focus', () => {
-        if (passwordInput.type === 'password') {
-            mascot.textContent = '🙈';
-        }
-    });
-
-    passwordInput.addEventListener('blur', () => {
-        if (passwordInput.value === '') {
-            mascot.textContent = '🐒';
-        } else if (passwordInput.type === 'password') {
-            mascot.textContent = '🐒';
         }
     });
 
@@ -337,10 +316,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return score;
     }
 
+    function updateLockIcon(score) {
+        const lockIcon = document.getElementById('lock-icon');
+        if (!lockIcon) return;
+        // Remove all strength classes
+        lockIcon.className = lockIcon.className.replace(/strength-\d/g, '').trim();
+        lockIcon.classList.remove('unlocked');
+        if (passwordInput.value.length === 0) return;
+        lockIcon.classList.add(`strength-${score}`);
+        // Open shackle for strong passwords (score 4+)
+        if (score >= 4) lockIcon.classList.add('unlocked');
+    }
+
     function updateStrengthUI(score, numericScore, entropy) {
         let strengthLabel = 'None';
         let colorVar = 'var(--strength-0)';
         let width = '0%';
+
+        updateLockIcon(score);
         
         scoreText.textContent = `${numericScore}/100`;
         entropyText.textContent = `${entropy} bits`;
