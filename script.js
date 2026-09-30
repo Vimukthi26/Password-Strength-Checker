@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const generateBtn = document.getElementById('generate-btn');
     const copyBtn = document.getElementById('copy-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
     const toast = document.getElementById('toast');
 
     // Requirements regex mapping
@@ -78,6 +79,17 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to copy password: ', err);
             showToast('Failed to copy password!');
         });
+    });
+
+    // Refresh / Clear Password
+    refreshBtn.addEventListener('click', () => {
+        passwordInput.value = '';
+        passwordInput.dispatchEvent(new Event('input'));
+        
+        // Ensure eye icon resets if it was text
+        passwordInput.type = 'password';
+        iconEye.classList.remove('hidden');
+        iconEyeOff.classList.add('hidden');
     });
 
     function checkPassword(password) {
