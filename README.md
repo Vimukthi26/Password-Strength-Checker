@@ -43,3 +43,6 @@ Since this is a client-side only application, no installation or build tools are
 ## 🔒 Privacy & Security Note
 
 This tool evaluates your passwords completely offline in your browser (using JavaScript). The only time it communicates with the internet is to check the *Have I Been Pwned* API, during which it **only sends the first 5 characters** of the SHA-1 hash of your password. Your actual password is never transmitted over the network.
+
+---
+**Created by:** Chamodh Vimukthi - ITBNM-2313-0082 (NMC Horizon Campus)
