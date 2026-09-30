@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const strengthText = document.getElementById('strength-text');
     const scoreText = document.getElementById('score-text');
     const progressBar = document.getElementById('progress-bar');
+    const entropyText = document.getElementById('entropy-text');
+    const entropyStatus = document.getElementById('entropy-status');
     
     const requirementItems = document.querySelectorAll('#requirement-list li');
     
@@ -155,17 +157,40 @@ document.addEventListener('DOMContentLoaded', () => {
             numericScore = 0;
             suggestions = [];
         }
+        
+        // Calculate Entropy
+        let poolSize = 0;
+        if (requirements.lowercase.test(password)) poolSize += 26;
+        if (requirements.uppercase.test(password)) poolSize += 26;
+        if (requirements.number.test(password)) poolSize += 10;
+        if (requirements.special.test(password)) poolSize += 32;
+        
+        let entropy = 0;
+        if (poolSize > 0 && password.length > 0) {
+            entropy = Math.round(password.length * Math.log2(poolSize));
+        }
 
-        updateStrengthUI(score, numericScore);
+        updateStrengthUI(score, numericScore, entropy);
         updateSuggestions(suggestions);
     }
 
-    function updateStrengthUI(score, numericScore) {
+    function updateStrengthUI(score, numericScore, entropy) {
         let strengthLabel = 'None';
         let colorVar = 'var(--strength-0)';
         let width = '0%';
         
         scoreText.textContent = `${numericScore}/100`;
+        entropyText.textContent = `${entropy} bits`;
+        
+        let entropyDesc = '';
+        if (entropy > 0) {
+            if (entropy < 28) entropyDesc = 'Very Weak';
+            else if (entropy < 36) entropyDesc = 'Weak';
+            else if (entropy < 60) entropyDesc = 'Reasonable';
+            else if (entropy < 128) entropyDesc = 'Strong';
+            else entropyDesc = 'Very Strong';
+        }
+        entropyStatus.textContent = entropyDesc;
 
         switch (score) {
             case 0:
