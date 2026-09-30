@@ -12,6 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const crackTimeText = document.getElementById('crack-time-text');
     const pwnedStatus = document.getElementById('pwned-status');
     const pwnedCount = document.getElementById('pwned-count');
+    const mascot = document.getElementById('mascot');
     
     // Generator options
     const genLength = document.getElementById('gen-length');
@@ -107,9 +108,30 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isPassword) {
             iconEye.classList.add('hidden');
             iconEyeOff.classList.remove('hidden');
+            mascot.textContent = '🐵';
         } else {
             iconEye.classList.remove('hidden');
             iconEyeOff.classList.add('hidden');
+            if (document.activeElement === passwordInput) {
+                mascot.textContent = '🙈';
+            } else {
+                mascot.textContent = '🐒';
+            }
+        }
+    });
+
+    // Mascot Focus/Blur interaction
+    passwordInput.addEventListener('focus', () => {
+        if (passwordInput.type === 'password') {
+            mascot.textContent = '🙈';
+        }
+    });
+
+    passwordInput.addEventListener('blur', () => {
+        if (passwordInput.value === '') {
+            mascot.textContent = '🐒';
+        } else if (passwordInput.type === 'password') {
+            mascot.textContent = '🐒';
         }
     });
 
@@ -162,6 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         passwordInput.type = 'password';
         iconEye.classList.remove('hidden');
         iconEyeOff.classList.add('hidden');
+        mascot.textContent = '🐒';
     });
 
     function checkPassword(password) {
