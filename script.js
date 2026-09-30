@@ -16,11 +16,50 @@ document.addEventListener('DOMContentLoaded', () => {
     // Generator options
     const genLength = document.getElementById('gen-length');
     const genLengthVal = document.getElementById('gen-length-val');
+    const genWords = document.getElementById('gen-words');
+    const genWordsVal = document.getElementById('gen-words-val');
+    const tabRandom = document.getElementById('tab-random');
+    const tabPhrase = document.getElementById('tab-phrase');
+    const randomOptions = document.getElementById('random-options');
+    const phraseOptions = document.getElementById('phrase-options');
     
-    // Update slider value display
+    let isPassphraseMode = false;
+
+    // Tabs toggle
+    tabRandom.addEventListener('click', () => {
+        isPassphraseMode = false;
+        tabRandom.classList.add('active');
+        tabPhrase.classList.remove('active');
+        randomOptions.style.display = 'block';
+        phraseOptions.style.display = 'none';
+    });
+    
+    tabPhrase.addEventListener('click', () => {
+        isPassphraseMode = true;
+        tabPhrase.classList.add('active');
+        tabRandom.classList.remove('active');
+        phraseOptions.style.display = 'block';
+        randomOptions.style.display = 'none';
+    });
+    
+    // Update slider value displays
     genLength.addEventListener('input', (e) => {
         genLengthVal.textContent = e.target.value;
     });
+    genWords.addEventListener('input', (e) => {
+        genWordsVal.textContent = e.target.value;
+    });
+    
+    // Diceware Wordlist (subset for demonstration)
+    const dicewareWords = [
+        "apple", "bird", "cloud", "dance", "eagle", "fire", "ghost", "house", "island", "jump", 
+        "kite", "lion", "moon", "night", "ocean", "piano", "queen", "river", "star", "tree", 
+        "umbrella", "voice", "water", "xenon", "yellow", "zebra", "animal", "breeze", "crystal", 
+        "dragon", "echo", "forest", "guitar", "honey", "ice", "jungle", "koala", "lemon", "mango", 
+        "ninja", "orange", "panda", "quiet", "robot", "sun", "tiger", "unicorn", "violet", "wolf", 
+        "xray", "yacht", "zinc", "magic", "pizza", "rocket", "space", "turtle", "velvet", "whisper",
+        "coffee", "dream", "energy", "future", "galaxy", "hero", "impact", "joy", "karma", "legend"
+    ];
     
     const requirementItems = document.querySelectorAll('#requirement-list li');
     
@@ -300,6 +339,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function generateStrongPassword() {
+        if (isPassphraseMode) {
+            const wordCount = parseInt(document.getElementById('gen-words').value, 10);
+            const capitalize = document.getElementById('phrase-caps').checked;
+            const addNumber = document.getElementById('phrase-nums').checked;
+            
+            let phrase = [];
+            for (let i = 0; i < wordCount; i++) {
+                let word = dicewareWords[Math.floor(Math.random() * dicewareWords.length)];
+                if (capitalize) {
+                    word = word.charAt(0).toUpperCase() + word.slice(1);
+                }
+                phrase.push(word);
+            }
+            
+            if (addNumber) {
+                const randomNum = Math.floor(Math.random() * 100);
+                phrase.push(randomNum.toString());
+            }
+            
+            return phrase.join('-');
+        }
+
         const length = parseInt(document.getElementById('gen-length').value, 10);
         const useUpper = document.getElementById('gen-upper').checked;
         const useLower = document.getElementById('gen-lower').checked;

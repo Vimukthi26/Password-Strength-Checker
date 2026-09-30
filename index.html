@@ -101,15 +101,31 @@
             </div>
 
             <div class="generator-options">
-                <div class="length-slider-group">
-                    <label for="gen-length">Length: <span id="gen-length-val">16</span></label>
-                    <input type="range" id="gen-length" min="8" max="64" value="16">
+                <div class="generator-tabs">
+                    <button type="button" id="tab-random" class="tab-btn active">Random Characters</button>
+                    <button type="button" id="tab-phrase" class="tab-btn">Memorable Phrase</button>
                 </div>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="gen-upper" checked> Uppercase</label>
-                    <label><input type="checkbox" id="gen-lower" checked> Lowercase</label>
-                    <label><input type="checkbox" id="gen-numbers" checked> Numbers</label>
-                    <label><input type="checkbox" id="gen-symbols" checked> Symbols</label>
+                <div id="random-options">
+                    <div class="length-slider-group">
+                        <label for="gen-length">Length: <span id="gen-length-val">16</span></label>
+                        <input type="range" id="gen-length" min="8" max="64" value="16">
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="gen-upper" checked> Uppercase</label>
+                        <label><input type="checkbox" id="gen-lower" checked> Lowercase</label>
+                        <label><input type="checkbox" id="gen-numbers" checked> Numbers</label>
+                        <label><input type="checkbox" id="gen-symbols" checked> Symbols</label>
+                    </div>
+                </div>
+                <div id="phrase-options" style="display: none;">
+                    <div class="length-slider-group">
+                        <label for="gen-words">Words: <span id="gen-words-val">4</span></label>
+                        <input type="range" id="gen-words" min="3" max="10" value="4">
+                    </div>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" id="phrase-caps" checked> Capitalize Words</label>
+                        <label><input type="checkbox" id="phrase-nums" checked> Add a Number</label>
+                    </div>
                 </div>
             </div>
         </div>
