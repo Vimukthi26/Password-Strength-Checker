@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Strength Checker</title>
+    <meta name="description" content="A secure and interactive tool to check password strength and generate strong passwords.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <div class="card">
+            <header>
+                <h1>Password Vault</h1>
+                <p>Check your password strength or generate a new one.</p>
+            </header>
+
+            <div class="input-group">
+                <input type="password" id="password-input" placeholder="Enter your password">
+                <button type="button" id="toggle-visibility" aria-label="Toggle password visibility">
+                    <svg class="icon-eye" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                    <svg class="icon-eye-off hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="strength-section">
+                <div class="strength-header">
+                    <span>Strength:</span>
+                    <span id="strength-text" class="strength-text">None</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="progress-bar" class="progress-bar"></div>
+                </div>
+            </div>
+
+            <div class="requirements">
+                <p class="section-title">Password Requirements:</p>
+                <ul id="requirement-list">
+                    <li data-requirement="length" class="invalid">
+                        <span class="icon"></span> Minimum 8 characters
+                    </li>
+                    <li data-requirement="uppercase" class="invalid">
+                        <span class="icon"></span> Uppercase letter
+                    </li>
+                    <li data-requirement="lowercase" class="invalid">
+                        <span class="icon"></span> Lowercase letter
+                    </li>
+                    <li data-requirement="number" class="invalid">
+                        <span class="icon"></span> Number
+                    </li>
+                    <li data-requirement="special" class="invalid">
+                        <span class="icon"></span> Special character
+                    </li>
+                </ul>
+            </div>
+
+            <div class="suggestions-container" id="suggestions-container" style="display: none;">
+                <p class="section-title">Suggestions:</p>
+                <ul id="suggestions-list"></ul>
+            </div>
+
+            <div class="actions">
+                <button type="button" id="generate-btn" class="btn primary-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    Generate Password
+                </button>
+                <button type="button" id="copy-btn" class="btn secondary-btn" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast hidden">Password copied!</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
