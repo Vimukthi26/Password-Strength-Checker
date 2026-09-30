@@ -2,6 +2,8 @@
 
 A modern, highly interactive, and feature-rich Password Strength Checker and Secure Password Generator built with vanilla Web Technologies.
 
+🔗 **Live Demo:** [https://vimukthi26.github.io/Password-Strength-Checker/](https://vimukthi26.github.io/Password-Strength-Checker/)
+
 ## 🚀 Features
 
 ### Core Capabilities
