@@ -31,10 +31,10 @@
 }
 
 body.light-mode {
-    --bg-gradient-start: #f8fafc;
-    --bg-gradient-end: #cbd5e1;
-    --card-bg: rgba(226, 232, 240, 0.85); /* Ash color instead of white */
-    --card-border: rgba(0, 0, 0, 0.1);
+    --bg-gradient-start: #e2e8f0;
+    --bg-gradient-end: #94a3b8;
+    --card-bg: rgba(255, 255, 255, 0.95);
+    --card-border: rgba(0, 0, 0, 0.15);
     
     --text-primary: #1e293b;
     --text-secondary: #475569;
