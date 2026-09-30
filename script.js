@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar');
     const entropyText = document.getElementById('entropy-text');
     const crackTimeText = document.getElementById('crack-time-text');
+    const pwnedStatus = document.getElementById('pwned-status');
+    const pwnedCount = document.getElementById('pwned-count');
     
     const requirementItems = document.querySelectorAll('#requirement-list li');
     
@@ -199,6 +201,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
         updateStrengthUI(score, numericScore, entropy);
         updateSuggestions(suggestions);
+
+        // Debounce API check for breached passwords
+        clearTimeout(window.pwnedTimeout);
+        pwnedStatus.classList.remove('show');
+        
+        if (password.length > 0) {
+            window.pwnedTimeout = setTimeout(() => {
+                checkPwnedPassword(password).then(count => {
+                    if (count > 0) {
+                        pwnedCount.textContent = count.toLocaleString();
+                        pwnedStatus.classList.add('show');
+                        
+                        // Force score to 0 since it's breached
+                        updateStrengthUI(0, 0, entropy);
+                        updateSuggestions(["⚠️ This password has been found in a data breach! Never use it."]);
+                    }
+                });
+            }, 500); // 500ms debounce
+        }
     }
 
     function updateStrengthUI(score, numericScore, entropy) {
@@ -311,5 +332,39 @@ document.addEventListener('DOMContentLoaded', () => {
         if (seconds < 31536000) return `${Math.round(seconds / 86400)} days`;
         if (seconds < 3153600000) return `${Math.round(seconds / 31536000)} years`;
         return "Centuries";
+    }
+
+    // SHA-1 Hashing and Pwned API Check
+    async function sha1(str) {
+        const buffer = new TextEncoder().encode(str);
+        const hashBuffer = await crypto.subtle.digest('SHA-1', buffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex.toUpperCase();
+    }
+
+    async function checkPwnedPassword(password) {
+        try {
+            const hash = await sha1(password);
+            const prefix = hash.substring(0, 5);
+            const suffix = hash.substring(5);
+            
+            const response = await fetch(`https://api.pwnedpasswords.com/range/${prefix}`);
+            if (!response.ok) return 0;
+            
+            const text = await response.text();
+            const lines = text.split('\n');
+            
+            for (let line of lines) {
+                const parts = line.split(':');
+                if (parts[0] === suffix) {
+                    return parseInt(parts[1], 10);
+                }
+            }
+            return 0;
+        } catch (error) {
+            console.error('Error checking pwned passwords:', error);
+            return 0;
+        }
     }
 });

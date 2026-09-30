@@ -233,6 +233,29 @@ input::placeholder {
     transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.4s ease;
 }
 
+.pwned-warning {
+    display: none;
+    color: var(--strength-0);
+    font-size: 13px;
+    margin-top: 10px;
+    font-weight: 500;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    border-radius: 6px;
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    animation: fadeIn 0.3s ease;
+}
+
+.pwned-warning.show {
+    display: flex;
+}
+
+.pwned-warning svg {
+    flex-shrink: 0;
+}
+
 .requirements {
     margin-bottom: 24px;
     background: rgba(0,0,0,0.2);
