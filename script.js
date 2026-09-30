@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const scoreText = document.getElementById('score-text');
     const progressBar = document.getElementById('progress-bar');
     const entropyText = document.getElementById('entropy-text');
-    const entropyStatus = document.getElementById('entropy-status');
+    const crackTimeText = document.getElementById('crack-time-text');
     
     const requirementItems = document.querySelectorAll('#requirement-list li');
     
@@ -209,15 +209,12 @@ document.addEventListener('DOMContentLoaded', () => {
         scoreText.textContent = `${numericScore}/100`;
         entropyText.textContent = `${entropy} bits`;
         
-        let entropyDesc = '';
-        if (entropy > 0) {
-            if (entropy < 28) entropyDesc = 'Very Weak';
-            else if (entropy < 36) entropyDesc = 'Weak';
-            else if (entropy < 60) entropyDesc = 'Reasonable';
-            else if (entropy < 128) entropyDesc = 'Strong';
-            else entropyDesc = 'Very Strong';
-        }
-        entropyStatus.textContent = entropyDesc;
+        let combinations = Math.pow(2, entropy);
+        let attemptsPerSecond = 10000000000; // 10 Billion guesses per second
+        let crackSeconds = combinations / attemptsPerSecond;
+        if (entropy === 0) crackSeconds = 0;
+        
+        crackTimeText.textContent = formatCrackTime(crackSeconds);
 
         switch (score) {
             case 0:
@@ -304,5 +301,15 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
+    }
+
+    function formatCrackTime(seconds) {
+        if (seconds < 1) return "Instant";
+        if (seconds < 60) return `${Math.round(seconds)} secs`;
+        if (seconds < 3600) return `${Math.round(seconds / 60)} mins`;
+        if (seconds < 86400) return `${Math.round(seconds / 3600)} hours`;
+        if (seconds < 31536000) return `${Math.round(seconds / 86400)} days`;
+        if (seconds < 3153600000) return `${Math.round(seconds / 31536000)} years`;
+        return "Centuries";
     }
 });
