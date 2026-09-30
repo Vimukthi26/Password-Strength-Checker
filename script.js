@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const iconEyeOff = document.querySelector('.icon-eye-off');
     
     const strengthText = document.getElementById('strength-text');
+    const scoreText = document.getElementById('score-text');
     const progressBar = document.getElementById('progress-bar');
     
     const requirementItems = document.querySelectorAll('#requirement-list li');
@@ -128,34 +129,43 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Calculate Score
-        // Base score on met requirements (0 to 5)
+        // Calculate 0-100 Score
+        let numericScore = 0;
+        if (password.length > 0) {
+            numericScore += Math.min(password.length * 4, 40); // Max 40 points for length
+            numericScore += metRequirements * 10; // Max 50 points for requirements
+            if (password.length >= 12 && metRequirements >= 4) numericScore += 10; // Bonus 10 points
+            
+            // Penalize
+            if (/^[a-zA-Z]+$/.test(password)) numericScore -= 15;
+            if (/^[0-9]+$/.test(password)) numericScore -= 15;
+            
+            numericScore = Math.max(0, Math.min(100, numericScore));
+        }
+
+        // Calculate Level Score (0-5) for Progress Bar
         score = metRequirements;
-        
-        // Extra points for length
         if (password.length >= 12) score += 1;
-        
-        // Penalize for common patterns (simplified check)
-        if (/^[a-zA-Z]+$/.test(password) && password.length > 0) score -= 1; // Only letters
-        if (/^[0-9]+$/.test(password) && password.length > 0) score -= 1; // Only numbers
-        
-        // Clamp score between 0 and 5
+        if (/^[a-zA-Z]+$/.test(password) && password.length > 0) score -= 1;
+        if (/^[0-9]+$/.test(password) && password.length > 0) score -= 1;
         score = Math.max(0, Math.min(5, score));
         
-        // If password is empty, reset score
         if (password.length === 0) {
             score = 0;
+            numericScore = 0;
             suggestions = [];
         }
 
-        updateStrengthUI(score);
+        updateStrengthUI(score, numericScore);
         updateSuggestions(suggestions);
     }
 
-    function updateStrengthUI(score) {
+    function updateStrengthUI(score, numericScore) {
         let strengthLabel = 'None';
         let colorVar = 'var(--strength-0)';
         let width = '0%';
+        
+        scoreText.textContent = `${numericScore}/100`;
 
         switch (score) {
             case 0:

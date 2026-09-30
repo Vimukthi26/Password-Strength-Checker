@@ -160,7 +160,13 @@ input::placeholder {
 }
 
 .strength-text {
+    font-weight: 700;
     transition: color 0.3s ease;
+}
+
+.score-text {
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 .progress-bar-container {
